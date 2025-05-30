@@ -12,6 +12,45 @@ Este repositório contém um exemplo de implementação de um servidor MCP (_Mod
 - Integração com a API do NWS usando `fetch` (camada de infraestrutura).
 - Comunicação via _stdio_ usando o protocolo MCP (`@modelcontextprotocol/sdk`).
 
+## Novas Funcionalidades
+
+O projeto agora conta com:
+
+- **Busca de frete por CEP**: ferramenta `price-by-cep` que consulta preços de envio entre dois CEPs usando a API do Melhor Envio. É necessário gerar um token gratuito em https://app.melhorenvio.com.br/integracoes/permissoes-de-acesso (marque a opção "shipping-calculate (Cotação de fretes)") e configurar no arquivo `.env`.
+- **Ferramentas de banco de dados escolar**: diversas tools para consultar, criar, atualizar e deletar alunos e professores, além de listar turmas, matrículas e realizar buscas avançadas no banco PostgreSQL.
+
+### Banco de Dados PostgreSQL
+Para utilizar as ferramentas de escola, é necessário ter o Docker instalado. Agora, basta rodar o comando abaixo para criar, popular e iniciar o banco automaticamente:
+
+```powershell
+docker-compose up -d
+```
+
+O arquivo `docker-compose.yml` já está configurado para:
+- Subir um container PostgreSQL com o banco, usuário e senha corretos.
+- Executar automaticamente o script `school_init.sql` na primeira inicialização, criando as tabelas e inserindo dados de exemplo.
+
+> **Importante:**
+> Certifique-se de que o arquivo `school_init.sql` está na mesma pasta do `docker-compose.yml` antes de rodar o comando acima.
+
+
+#### Caso tenha problemas com o container e queira deletá-lo:
+
+1. Pare o container (caso esteja rodando ou pausado):
+```powershell
+docker stop escola-postgres
+```
+2. Remova o container:
+```powershell
+docker rm escola-postgres
+```
+
+Se quiser remover também o volume de dados (apaga tudo do banco):
+```powershell
+docker volume rm mcp-server-sample_pgdata
+```
+
+
 ## Arquitetura
 
 O projeto segue uma arquitetura em camadas inspirada em padrões de **Domain-Driven Design** (DDD):
