@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:16
+    container_name: escola-postgres
+    environment:
+      POSTGRES_DB: escola
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: deus
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./school_init.sql:/docker-entrypoint-initdb.d/school_init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+volumes:
+  pgdata:
+
+# O script school_init.sql será executado automaticamente na primeira inicialização do container.
+# Não é necessário rodar docker cp ou docker exec manualmente.
